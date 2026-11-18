@@ -3,6 +3,7 @@ import { Inter, Montserrat } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
+import { MotionProvider } from "@/components/motion/motion-provider";
 import { siteConfig } from "@/site.config";
 import "./globals.css";
 
@@ -39,12 +40,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <Header />
-        <main id="main" tabIndex={-1} className="flex-1 outline-none">
-          {children}
-        </main>
-        <Footer />
-        <FloatingWhatsApp />
+        <MotionProvider>
+          <Header />
+          <main id="main" tabIndex={-1} className="flex-1 outline-none">
+            {children}
+          </main>
+          <Footer />
+          <FloatingWhatsApp />
+        </MotionProvider>
+        <noscript>
+          <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
       </body>
     </html>
   );

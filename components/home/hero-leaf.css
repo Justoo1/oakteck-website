@@ -1,0 +1,122 @@
+/* Hero leaf timeline (seconds):
+ *   0.0  leaf body fades and settles
+ *   0.45 veins draw in, branch by branch
+ *   1.9  nodes light up in sequence; rings revealed
+ *   2.4  mask completes to the exact artwork
+ *   2.3  roots grow down into the page
+ *   3.2+ nodes breathe gently
+ * Only transform and opacity are animated, plus stroke-dashoffset on the
+ * mask/roots, which does not trigger layout.
+ */
+
+.hl-leaf {
+  overflow: visible;
+}
+
+.hl-body {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: body-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hl-veinStroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 0.85s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  animation-delay: calc(0.45s + var(--i) * 0.16s);
+}
+
+.hl-maskFinal {
+  opacity: 0;
+  animation: fade-in 0.4s ease-out 2.4s forwards;
+}
+
+.hl-ringReveal {
+  opacity: 0;
+  transform: scale(0.4);
+  animation: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: calc(1.9s + var(--i) * 0.14s);
+}
+
+.hl-node {
+  opacity: 0;
+  transform: scale(0.3);
+  animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: calc(1.95s + var(--i) * 0.14s);
+}
+
+/* Breathing lives on the glow only, so the node's popped state holds. */
+.hl-glow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: breathe 5s ease-in-out infinite;
+  animation-delay: calc(3.2s + var(--i) * 0.6s);
+}
+
+/* Roots grow down from the stem. scaleY keeps it on the compositor; the
+   strokes are non-scaling, so their width stays constant while they grow. */
+.hl-roots {
+  overflow: visible;
+  transform-origin: 50% 0;
+  animation: grow-down 1.6s cubic-bezier(0.33, 1, 0.68, 1) 2.3s both;
+}
+
+@keyframes body-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+}
+@keyframes grow-down {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+}
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pop {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* Reduced motion: show the finished leaf, no draw-on, no breathing. */
+@media (prefers-reduced-motion: reduce) {
+  .hl-body,
+  .hl-veinStroke,
+  .hl-maskFinal,
+  .hl-ringReveal,
+  .hl-node,
+  .hl-glow,
+  .hl-roots {
+    animation: none;
+  }
+  .hl-veinStroke {
+    stroke-dashoffset: 0;
+  }
+  .hl-maskFinal,
+  .hl-ringReveal,
+  .hl-node {
+    opacity: 1;
+    transform: none;
+  }
+}
