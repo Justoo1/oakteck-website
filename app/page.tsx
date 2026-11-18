@@ -17,7 +17,7 @@ const swatches = [
 
 export default function TokensPreview() {
   return (
-    <main className="flex-1">
+    <div>
       <section className="on-dark bg-navy-950 py-20 text-white">
         <div className="container-page">
           <p className="eyebrow text-wood-400">Design tokens · milestone 1</p>
@@ -53,6 +53,6 @@ export default function TokensPreview() {
           </ul>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
