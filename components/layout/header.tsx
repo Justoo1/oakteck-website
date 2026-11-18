@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/brand/logo";
 import { WhatsAppIcon } from "@/components/icons";
@@ -8,7 +8,7 @@ import { MobileNav } from "./mobile-nav";
 
 export function Header() {
   return (
-    <header className="on-dark sticky top-0 z-40 border-b border-white/5 bg-navy-950/95 backdrop-blur-md">
+    <header className="on-dark sticky top-0 z-40 border-b border-white/5 bg-navy-950">
       <div className="container-page flex h-16 items-center justify-between gap-4 lg:h-[72px]">
         <Link href="/" aria-label={`${siteConfig.name} home`} className="shrink-0 rounded-md">
           <Logo variant="dark" label={null} className="h-11 lg:h-12" />

@@ -12,12 +12,13 @@ type InViewVideoProps = {
 };
 
 /**
- * Muted, looping demo clip. Nothing is downloaded until it scrolls into view;
+ * Muted, looping demo clip. Nothing (not even the poster) is downloaded until it nears the viewport;
  * it plays while visible and pauses when it leaves (or the tab is hidden).
  * With reduced motion it never autoplays and shows controls instead.
  */
 export function InViewVideo({ src, poster, label, className, width, height }: InViewVideoProps) {
   const ref = useRef<HTMLVideoElement>(null);
+  const [near, setNear] = useState(false);
   const [active, setActive] = useState(false);
   const [reduced, setReduced] = useState(false);
 
@@ -39,10 +40,14 @@ export function InViewVideo({ src, poster, label, className, width, height }: In
       { threshold: 0.4 },
     );
     io.observe(video);
+    // Fetch the poster only when the clip is getting close, not on page load.
+    const nearIo = new IntersectionObserver(([e]) => e.isIntersecting && setNear(true), { rootMargin: "600px 0px" });
+    nearIo.observe(video);
     const onVisibility = () => document.hidden && video.pause();
     document.addEventListener("visibilitychange", onVisibility);
     return () => {
       io.disconnect();
+      nearIo.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
       video.pause();
     };
@@ -54,7 +59,7 @@ export function InViewVideo({ src, poster, label, className, width, height }: In
       className={className}
       width={width}
       height={height}
-      poster={poster}
+      poster={near ? poster : undefined}
       src={active ? src : undefined}
       aria-label={label}
       muted

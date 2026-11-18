@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { PageHero } from "@/components/page-hero";
 import { CtaBand } from "@/components/home/cta-band";
 import { WorkFilter } from "@/components/work/work-filter";
 import { activeWorkTags, work } from "@/content/work";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Work",
   description:
     "Selected projects by Oakteck's founder: e-commerce to ERP sync, Odoo-backed real estate, AI CV review, barcode inventory and marketing sites.",
-  alternates: { canonical: "/work" },
-};
+  path: "/work",
+});
 
 export default function WorkPage() {
   return (
@@ -22,6 +23,7 @@ export default function WorkPage() {
       />
       <section aria-label="Case studies" className="bg-paper py-16 lg:py-24">
         <div className="container-page">
+          <h2 className="sr-only">Case studies</h2>
           <WorkFilter items={work} tags={activeWorkTags} />
         </div>
       </section>

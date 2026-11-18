@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { Hero } from "@/components/home/hero";
 import { TrustStrip } from "@/components/home/trust-strip";
 import { ServicesGrid } from "@/components/home/services-grid";
@@ -12,11 +13,12 @@ import { TechMarquee } from "@/components/home/tech-marquee";
 import { CtaBand } from "@/components/home/cta-band";
 import { siteConfig } from "@/site.config";
 
-export const metadata: Metadata = {
-  title: { absolute: `${siteConfig.name} | ${siteConfig.tagline}` },
+export const metadata: Metadata = pageMetadata({
+  title: `${siteConfig.name} | ${siteConfig.tagline}`,
   description: siteConfig.description,
-  alternates: { canonical: "/" },
-};
+  path: "/",
+  absoluteTitle: true,
+});
 
 export default function HomePage() {
   return (

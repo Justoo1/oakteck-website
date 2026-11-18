@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import type { Route } from "next";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { ArrowRight } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { DraftBadge } from "@/components/draft-badge";
 import { posts, publishedPosts } from "@/content/blog";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Insights",
   description: "Notes from Oakteck on building software for Ghanaian businesses.",
-  alternates: { canonical: "/blog" },
+  path: "/blog",
   // Index the blog only once it has a published post.
-  robots: publishedPosts.length ? undefined : { index: false, follow: true },
-};
+  noindex: publishedPosts.length === 0,
+});
 
 export default function BlogIndex() {
   return (

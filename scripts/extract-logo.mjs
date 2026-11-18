@@ -6,7 +6,8 @@
 //   node scripts/extract-logo.mjs
 //
 // Outputs:
-//   components/brand/logo-data.ts       silhouette, blue half, veins and letters
+//   components/brand/logo-data.ts       silhouette, blue half, veins and letters (hero animation)
+//   public/brand/oakteck-logo-sprite.svg the same geometry as a cached sprite for <Logo>
 //   public/brand/oakteck-grain-logo.svg wood grain for the full logo (clipped)
 //   public/brand/oakteck-grain-mark.svg wood grain for the leaf mark (clipped)
 import { readFileSync, writeFileSync } from "node:fs";
@@ -61,5 +62,21 @@ function grainSvg(s, clipId) {
 }
 writeFileSync(new URL("../public/brand/oakteck-grain-logo.svg", import.meta.url), grainSvg(logoDark, "sil"));
 writeFileSync(new URL("../public/brand/oakteck-grain-mark.svg", import.meta.url), grainSvg(mark, "msil"));
+
+// External sprite for <Logo>: the geometry is fetched once and cached, instead
+// of repeating in every page's HTML. Split into base (wood silhouette) and top
+// (blue half, veins, letters) so the cached wood-grain overlay sits between them.
+const letterPaths = (oakFill) =>
+  letters.map((l) => `<path d="${l.d}" fill="${l.part === "teck" ? "#1380CC" : oakFill}"/>`).join("");
+const top = (g) => `<path d="${g.blue}" fill="#1380CC" fill-rule="evenodd"/><path d="${g.veins}" fill="#111111" fill-rule="evenodd"/>`;
+const sprite = `<svg xmlns="http://www.w3.org/2000/svg">
+<symbol id="logo-base" viewBox="${logo.viewBox}"><path d="${logo.silhouette}" fill="#C69A6D"/></symbol>
+<symbol id="logo-top-dark" viewBox="${logo.viewBox}">${top(logo)}${letterPaths("#FFFFFF")}</symbol>
+<symbol id="logo-top-light" viewBox="${logo.viewBox}">${top(logo)}${letterPaths("#0D1B2A")}</symbol>
+<symbol id="mark-base" viewBox="${markParts.viewBox}"><path d="${markParts.silhouette}" fill="#C69A6D"/></symbol>
+<symbol id="mark-top" viewBox="${markParts.viewBox}">${top(markParts)}</symbol>
+</svg>
+`;
+writeFileSync(new URL("../public/brand/oakteck-logo-sprite.svg", import.meta.url), sprite);
 
 console.log("Logo data written.");

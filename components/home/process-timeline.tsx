@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { m, useScroll, useSpring } from "motion/react";
+import { m, useScroll } from "motion/react";
 import { Compass, Hammer, LifeBuoy, PenLine } from "lucide-react";
 
 const steps = [
@@ -34,28 +34,24 @@ const steps = [
 export function ProcessTimeline() {
   const ref = useRef<HTMLOListElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 85%", "end 55%"] });
-  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 });
 
   return (
     <ol ref={ref} className="relative mt-14 grid gap-10 lg:grid-cols-4 lg:gap-8">
       {/* Track + growing line, desktop */}
       <div aria-hidden="true" className="absolute top-6 right-[12.5%] left-[12.5%] hidden h-0.5 bg-line lg:block">
-        <m.div style={{ scaleX: progress }} className="h-full origin-left bg-wood-400 motion-reduce:transform-none!" />
+        <m.div style={{ scaleX: scrollYProgress }} className="h-full origin-left bg-wood-400 motion-reduce:transform-none!" />
       </div>
       {/* Track + growing line, mobile */}
       <div aria-hidden="true" className="absolute top-6 bottom-6 left-6 w-0.5 -translate-x-1/2 bg-line lg:hidden">
-        <m.div style={{ scaleY: progress }} className="h-full w-full origin-top bg-wood-400 motion-reduce:transform-none!" />
+        <m.div style={{ scaleY: scrollYProgress }} className="h-full w-full origin-top bg-wood-400 motion-reduce:transform-none!" />
       </div>
 
       {steps.map((s, i) => (
-        <m.li
+        <li
           key={s.title}
           data-reveal
+          data-reveal-delay={i * 0.08}
           className="relative grid grid-cols-[3rem_1fr] gap-5 lg:grid-cols-1 lg:justify-items-center lg:text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "0px 0px -15% 0px" }}
-          transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
         >
           <span className="relative z-10 flex size-12 items-center justify-center rounded-full bg-navy-950 text-blue-400 ring-8 ring-paper">
             <s.icon className="size-5" aria-hidden="true" />
@@ -67,7 +63,7 @@ export function ProcessTimeline() {
             <h3 className="mt-1 text-xl font-bold text-ink">{s.title}</h3>
             <p className="mt-2 leading-relaxed text-muted lg:mx-auto lg:max-w-[16rem]">{s.body}</p>
           </div>
-        </m.li>
+        </li>
       ))}
     </ol>
   );

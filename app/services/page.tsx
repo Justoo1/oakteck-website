@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import type { Route } from "next";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { ArrowRight, Check } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/motion/reveal";
@@ -9,12 +10,12 @@ import { serviceIcons } from "@/components/icons";
 import { services } from "@/content/services";
 import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Services",
   description:
     "Custom software and SaaS, web and mobile apps, ERP and Odoo, Mobile Money payments and SMS, AI for business, cloud and DevOps, and product design, from Oakteck in Accra.",
-  alternates: { canonical: "/services" },
-};
+  path: "/services",
+});
 
 export default function ServicesPage() {
   return (

@@ -33,66 +33,76 @@ const NODES = [
 // The mark's viewBox is "1411 46 711 735"; leave room for the node glow.
 const VIEWBOX = "1380 20 780 780";
 
+/**
+ * Two stacked SVGs: a static base (wood, grain, blue half) that paints once and
+ * fades in on the compositor, and an overlay with the animated veins and nodes.
+ * SVG animations repaint on the main thread, so keeping the grain out of the
+ * animated layer keeps each frame cheap on low-end phones.
+ */
 export function HeroLeaf({ className }: { className?: string }) {
   return (
-    <svg
-      viewBox={VIEWBOX}
-      className={`hl-leaf ${className ?? ""}`}
-      aria-hidden="true"
-      focusable="false"
-    >
-      <defs>
-        <mask id="hero-vein-mask" maskUnits="userSpaceOnUse" x="1380" y="20" width="780" height="780">
-          <rect x="1380" y="20" width="780" height="780" fill="#fff" className="hl-maskFinal" />
-          {VEIN_STROKES.map((d, i) => (
-            <path
-              key={d}
-              d={d}
-              pathLength={1}
-              fill="none"
-              stroke="#fff"
-              strokeWidth={56}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="hl-veinStroke"
-              style={{ "--i": i } as React.CSSProperties}
-            />
-          ))}
-          {NODES.map((n, i) => (
-            <circle
-              key={i}
-              cx={n.cx}
-              cy={n.cy}
-              r={46}
-              fill="#fff"
-              className="hl-ringReveal"
-              style={{ "--i": i, transformOrigin: `${n.cx}px ${n.cy}px` } as React.CSSProperties}
-            />
-          ))}
-        </mask>
-        <radialGradient id="hero-node-glow">
-          <stop offset="0" stopColor="#4fa8e8" stopOpacity="0.95" />
-          <stop offset="0.35" stopColor="#1380cc" stopOpacity="0.55" />
-          <stop offset="1" stopColor="#1380cc" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-
-      <g className="hl-body">
+    <div className={`hl-contain ${className ?? ""}`} aria-hidden="true">
+      <svg viewBox={VIEWBOX} className="hl-leaf hl-base absolute inset-0 size-full" focusable="false">
+        <defs>
+          {/* Wood grain as a pattern fill: identical look, and (unlike a standalone
+              <image>) not a Largest Contentful Paint candidate, so the headline is. */}
+          <pattern id="hero-grain" patternUnits="userSpaceOnUse" x="1411" y="46" width="711" height="735">
+            <image href="/brand/oakteck-grain-mark.svg" x="0" y="0" width="711" height="735" preserveAspectRatio="none" />
+          </pattern>
+        </defs>
         <path d={MARK.silhouette} fill={LEAF_COLORS.wood} />
-        <image href="/brand/oakteck-grain-mark.svg" x="1411" y="46" width="711" height="735" preserveAspectRatio="none" />
+        <path d={MARK.silhouette} fill="url(#hero-grain)" />
         <path d={MARK.blue} fill={LEAF_COLORS.blue} fillRule="evenodd" />
-      </g>
+      </svg>
 
-      <path d={MARK.veins} fill={LEAF_COLORS.veins} fillRule="evenodd" mask="url(#hero-vein-mask)" />
+      <svg viewBox={VIEWBOX} className="hl-leaf hl-overlay absolute inset-0 size-full" focusable="false">
+        <defs>
+          <mask id="hero-vein-mask" maskUnits="userSpaceOnUse" x="1380" y="20" width="780" height="780">
+            <rect x="1380" y="20" width="780" height="780" fill="#fff" className="hl-maskFinal" />
+            {VEIN_STROKES.map((d, i) => (
+              <path
+                key={d}
+                d={d}
+                pathLength={1}
+                fill="none"
+                stroke="#fff"
+                strokeWidth={56}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="hl-veinStroke"
+                style={{ "--i": i } as React.CSSProperties}
+              />
+            ))}
+            {NODES.map((n, i) => (
+              <circle
+                key={i}
+                cx={n.cx}
+                cy={n.cy}
+                r={46}
+                fill="#fff"
+                className="hl-ringReveal"
+                style={{ "--i": i, transformOrigin: `${n.cx}px ${n.cy}px` } as React.CSSProperties}
+              />
+            ))}
+          </mask>
+          <radialGradient id="hero-node-glow">
+            <stop offset="0" stopColor="#4fa8e8" stopOpacity="0.95" />
+            <stop offset="0.35" stopColor="#1380cc" stopOpacity="0.55" />
+            <stop offset="1" stopColor="#1380cc" stopOpacity="0" />
+          </radialGradient>
+        </defs>
 
-      {NODES.map((n, i) => (
-        <g key={i} className="hl-node" style={{ "--i": i, transformOrigin: `${n.cx}px ${n.cy}px` } as React.CSSProperties}>
-          <circle cx={n.cx} cy={n.cy} r={70} fill="url(#hero-node-glow)" className="hl-glow" />
-          <circle cx={n.cx} cy={n.cy} r={15} fill="#4fa8e8" />
-          <circle cx={n.cx} cy={n.cy} r={7} fill="#e8f4fd" />
-        </g>
-      ))}
-    </svg>
+        <path d={MARK.veins} fill={LEAF_COLORS.veins} fillRule="evenodd" mask="url(#hero-vein-mask)" />
+
+        {NODES.map((n, i) => (
+          <g key={i} className="hl-node" style={{ "--i": i, transformOrigin: `${n.cx}px ${n.cy}px` } as React.CSSProperties}>
+            <circle cx={n.cx} cy={n.cy} r={70} fill="url(#hero-node-glow)" />
+            <circle cx={n.cx} cy={n.cy} r={15} fill="#4fa8e8" />
+            <circle cx={n.cx} cy={n.cy} r={7} fill="#e8f4fd" />
+          </g>
+        ))}
+      </svg>
+    </div>
   );
 }
 

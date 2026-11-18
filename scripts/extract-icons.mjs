@@ -41,4 +41,14 @@ writeFileSync(
     "",
   ].join("\n"),
 );
+// Sprite for the tech marquee: referenced with <use>, so the paths are fetched
+// once and cached instead of being repeated in the page HTML.
+const spriteKeys = ["python", "fastapi", "django", "nextjs", "react", "typescript", "postgresql", "redis", "docker", "odoo", "langchain"];
+writeFileSync(
+  new URL("../public/brand/tech-icons.svg", import.meta.url),
+  `<svg xmlns="http://www.w3.org/2000/svg">${spriteKeys
+    .map((k) => `<symbol id="${k}" viewBox="0 0 24 24"><path fill="currentColor" d="${out[k].path}"/></symbol>`)
+    .join("")}</svg>\n`,
+);
+
 console.log(`Wrote ${Object.keys(out).length} brand icons.`);

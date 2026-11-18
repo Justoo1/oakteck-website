@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/motion/reveal";
 import { WhatsAppIcon } from "@/components/icons";
@@ -15,7 +15,7 @@ export function CtaBand({
     <section aria-labelledby="cta-title" className="bg-white py-16 lg:py-20">
       <div className="container-page">
         <Reveal className="on-dark relative isolate overflow-hidden rounded-3xl bg-navy-950 px-6 py-14 text-center text-white sm:px-12 lg:py-20">
-          <div aria-hidden="true" className="absolute -top-24 left-1/2 -z-10 size-[30rem] -translate-x-1/2 rounded-full bg-blue-500/20 blur-3xl" />
+          <div aria-hidden="true" className="absolute -top-24 left-1/2 -z-10 size-[30rem] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(19_128_204/0.40),transparent)]" />
           <div aria-hidden="true" className="mx-auto mb-8 h-px w-24 bg-wood-400" />
           <h2 id="cta-title" className="mx-auto max-w-2xl text-3xl leading-tight font-bold sm:text-5xl">
             {title}

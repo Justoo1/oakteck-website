@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import type { Route } from "next";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -25,7 +25,7 @@ export function PageHero({
 }) {
   return (
     <section className={cn("on-dark relative isolate overflow-hidden bg-navy-950 text-white", className)}>
-      <div aria-hidden="true" className="absolute -top-40 right-[-10%] -z-10 size-[36rem] rounded-full bg-blue-500/12 blur-3xl" />
+      <div aria-hidden="true" className="absolute -top-40 right-[-10%] -z-10 size-[36rem] rounded-full bg-[radial-gradient(closest-side,rgb(19_128_204/0.24),transparent)]" />
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10 opacity-[0.06] [background-image:linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] [background-size:64px_64px] [mask-image:radial-gradient(ellipse_at_80%_20%,black,transparent_65%)]"

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import type { Route } from "next";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { Logo } from "@/components/brand/logo";

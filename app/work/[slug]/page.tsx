@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { pageMetadata } from "@/lib/metadata";
+import Link from "@/components/app-link";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { CtaBand } from "@/components/home/cta-band";
 import { getWork, work } from "@/content/work";
+
+/** Every page here is prerendered from generateStaticParams, so the dev-time
+ *  instant-navigation check (params outside Suspense) does not apply. */
+export const instant = false;
 
 export function generateStaticParams() {
   return work.map((w) => ({ slug: w.slug }));
@@ -15,22 +19,13 @@ export async function generateMetadata({ params }: PageProps<"/work/[slug]">): P
   const { slug } = await params;
   const item = getWork(slug);
   if (!item) return {};
-  return {
-    title: item.title,
-    description: item.summary,
-    alternates: { canonical: `/work/${item.slug}` },
-  };
+  return pageMetadata({ title: item.title, description: item.summary, path: `/work/${item.slug}` });
 }
 
-export default function CaseStudyPage(props: PageProps<"/work/[slug]">) {
-  return (
-    <Suspense fallback={<div className="min-h-[60vh] bg-navy-950" />}>
-      <CaseStudy params={props.params} />
-    </Suspense>
-  );
-}
-
-async function CaseStudy({ params }: Pick<PageProps<"/work/[slug]">, "params">) {
+// Params come from generateStaticParams, so every page is fully prerendered.
+// Awaiting them here (rather than behind a Suspense fallback) keeps the fallback
+// out of the static HTML, which otherwise caused a layout shift on load.
+export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]">) {
   const { slug } = await params;
   const item = getWork(slug);
   if (!item) notFound();

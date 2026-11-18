@@ -18,7 +18,8 @@ import {
   Wallet,
   type LucideIcon,
 } from "lucide-react";
-import { githubIcon, whatsappIcon, type BrandIconData } from "@/components/brand/brand-icons";
+import { githubIcon, type BrandIconData } from "@/components/brand/brand-icons";
+export { WhatsAppIcon } from "@/components/brand/whatsapp-icon";
 import type { SectorIcon } from "@/content/products";
 import type { ServiceIcon } from "@/content/services";
 
@@ -56,10 +57,6 @@ export function BrandGlyph({ icon, className }: { icon: BrandIconData; className
       <path d={icon.path} />
     </svg>
   );
-}
-
-export function WhatsAppIcon({ className }: { className?: string }) {
-  return <BrandGlyph icon={whatsappIcon} className={className} />;
 }
 
 export function GitHubIcon({ className }: { className?: string }) {

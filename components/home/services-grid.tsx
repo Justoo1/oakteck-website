@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { services } from "@/content/services";
 import { serviceIcons } from "@/components/icons";

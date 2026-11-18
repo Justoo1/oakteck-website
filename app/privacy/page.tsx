@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { PageHero } from "@/components/page-hero";
 import { Placeholder } from "@/components/placeholder";
 import { siteConfig } from "@/site.config";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Privacy policy",
-  description: `How ${siteConfig.legal.name} handles personal data from this website: the contact form, email and analytics.`,
-  alternates: { canonical: "/privacy" },
-};
+  description:
+    `How ${siteConfig.legal.name} handles personal data from this website: the contact form, email and analytics.`,
+  path: "/privacy",
+});
 
 function H2({ children }: { children: React.ReactNode }) {
   return <h2 className="mt-12 mb-3 text-2xl font-bold text-ink">{children}</h2>;

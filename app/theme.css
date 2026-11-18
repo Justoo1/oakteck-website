@@ -6,6 +6,7 @@
  *   - blue-400 on navy  6.7:1  -> text and links on dark
  *   - wood-400 on navy  6.6:1  -> fine on dark; decorative only on light (2.7:1)
  *   - muted on paper    6.9:1
+ *   - white on WhatsApp green #0E7A40 5.4:1 (the brand's #25D366 fails with white text)
  */
 
 @theme {
@@ -21,7 +22,7 @@
 
   --color-wood-300: #ddb68b;
   --color-wood-400: #c4966c;
-  --color-wood-700: #8a6a4a;
+  --color-wood-700: #7a5a3c; /* wood text on light, 5.5:1+ even on wood tints */
 
   --color-paper: #f7f9fb;
   --color-ink: #0d1b2a;

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHero } from "@/components/page-hero";
@@ -7,11 +8,12 @@ import { ContactForm } from "@/components/contact/contact-form";
 import { WhatsAppIcon } from "@/components/icons";
 import { siteConfig, whatsappLink } from "@/site.config";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contact",
-  description: `Start a project or request a demo. WhatsApp or call ${siteConfig.contact.phone.display}, or send us a message. Oakteck, Accra, Ghana.`,
-  alternates: { canonical: "/contact" },
-};
+  description:
+    `Start a project or request a demo. WhatsApp or call ${siteConfig.contact.phone.display}, or send us a message. Oakteck, Accra, Ghana.`,
+  path: "/contact",
+});
 
 export default function ContactPage() {
   const { contact } = siteConfig;

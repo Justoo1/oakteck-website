@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { pageMetadata } from "@/lib/metadata";
+import Link from "@/components/app-link";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 import { ArrowLeft } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { DraftBadge } from "@/components/draft-badge";
 import { getPost, posts } from "@/content/blog";
+
+/** Every page here is prerendered from generateStaticParams, so the dev-time
+ *  instant-navigation check (params outside Suspense) does not apply. */
+export const instant = false;
 
 export function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
@@ -15,23 +19,13 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) return {};
-  return {
-    title: post.title,
-    description: post.summary,
-    alternates: { canonical: `/blog/${post.slug}` },
-    robots: post.draft ? { index: false, follow: true } : undefined,
-  };
+  return pageMetadata({ title: post.title, description: post.summary, path: `/blog/${post.slug}`, noindex: post.draft });
 }
 
-export default function PostPage(props: PageProps<"/blog/[slug]">) {
-  return (
-    <Suspense fallback={<div className="min-h-[60vh] bg-navy-950" />}>
-      <Post params={props.params} />
-    </Suspense>
-  );
-}
-
-async function Post({ params }: Pick<PageProps<"/blog/[slug]">, "params">) {
+// Params come from generateStaticParams, so every page is fully prerendered.
+// Awaiting them here (rather than behind a Suspense fallback) keeps the fallback
+// out of the static HTML, which otherwise caused a layout shift on load.
+export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) notFound();

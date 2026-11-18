@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import type { Route } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 import { ArrowUpRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHero } from "@/components/page-hero";
@@ -16,7 +16,13 @@ import { CtaBand } from "@/components/home/cta-band";
 import { sectorIcons } from "@/components/icons";
 import { KwanixVideos } from "@/components/products/kwanix-videos";
 import { getProduct, products, type Product } from "@/content/products";
+import { JsonLd } from "@/components/json-ld";
+import { graph, kwanixSchema } from "@/lib/schema";
 import { cn } from "@/lib/utils";
+
+/** Every page here is prerendered from generateStaticParams, so the dev-time
+ *  instant-navigation check (params outside Suspense) does not apply. */
+export const instant = false;
 
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
@@ -26,28 +32,24 @@ export async function generateMetadata({ params }: PageProps<"/products/[slug]">
   const { slug } = await params;
   const product = getProduct(slug);
   if (!product) return {};
-  return {
+  return pageMetadata({
     title: `${product.name}: ${product.category}`,
     description: `${product.oneLine} ${product.problem.body.split(". ")[0]}.`,
-    alternates: { canonical: `/products/${product.slug}` },
-  };
+    path: `/products/${product.slug}`,
+  });
 }
 
-export default function ProductPage(props: PageProps<"/products/[slug]">) {
-  return (
-    <Suspense fallback={<div className="min-h-[60vh] bg-navy-950" />}>
-      <ProductDetails params={props.params} />
-    </Suspense>
-  );
-}
-
-async function ProductDetails({ params }: Pick<PageProps<"/products/[slug]">, "params">) {
+// Params come from generateStaticParams, so every page is fully prerendered.
+// Awaiting them here (rather than behind a Suspense fallback) keeps the fallback
+// out of the static HTML, which otherwise caused a layout shift on load.
+export default async function ProductPage({ params }: PageProps<"/products/[slug]">) {
   const { slug } = await params;
   const product = getProduct(slug);
   if (!product) notFound();
 
   return (
     <>
+      {product.slug === "kwanix" && <JsonLd data={graph(kwanixSchema())} />}
       <ProductHero product={product} />
       <Problem product={product} />
       <Features product={product} />
@@ -93,14 +95,18 @@ function ProductHero({ product }: { product: Product }) {
       intro={product.oneLine}
       aside={
         heroImage && heroImage.kind === "image" ? (
-          <DeviceFrame url={product.slug === "kwanix" ? "kwanix.com" : undefined}>
+          // Desktop only: on phones the same screenshot leads the Features section
+          // just below, and a hidden lazy image is never downloaded there.
+          <DeviceFrame url={product.slug === "kwanix" ? "kwanix.com" : undefined} className="hidden lg:block">
             <Image
               src={heroImage.src}
               alt={heroImage.alt}
               width={1440}
               height={900}
-              sizes="(min-width: 1024px) 560px, 100vw"
-              preload
+              sizes="560px"
+              quality={60}
+              loading="lazy"
+              fetchPriority="high"
               className="block h-auto w-full"
             />
           </DeviceFrame>
@@ -169,6 +175,7 @@ function Features({ product }: { product: Product }) {
                         width={1440}
                         height={900}
                         sizes="(min-width: 1024px) 560px, 100vw"
+                        quality={60}
                         className="block h-auto w-full"
                       />
                     </DeviceFrame>

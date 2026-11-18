@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useRef, useSyncExternalStore } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { WhatsAppIcon } from "@/components/icons";
+import { WhatsAppIcon } from "@/components/brand/whatsapp-icon";
 import { sendEnquiry, type ContactState } from "@/app/contact/actions";
 import { contactMethods, enquiryOptions, optionFromQuery } from "@/content/enquiry-options";
 import { cn } from "@/lib/utils";

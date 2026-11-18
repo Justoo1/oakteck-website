@@ -48,7 +48,7 @@ export function FeatureIllustration({ name }: { name: string }) {
   const Icon = icons[name] ?? ShieldCheck;
   return (
     <div className="relative isolate aspect-[16/10] overflow-hidden rounded-2xl bg-navy-950 ring-1 ring-navy-800">
-      <div aria-hidden="true" className="absolute -top-10 -right-10 -z-10 size-64 rounded-full bg-blue-500/15 blur-3xl" />
+      <div aria-hidden="true" className="absolute -top-10 -right-10 -z-10 size-64 rounded-full bg-[radial-gradient(closest-side,rgb(19_128_204/0.30),transparent)]" />
       <svg aria-hidden="true" viewBox="0 0 320 200" className="absolute inset-0 size-full" fill="none">
         <g stroke="#C4966C" strokeOpacity="0.45" strokeWidth="1.2">
           <path d="M160 100 H232 L262 70 H300" />

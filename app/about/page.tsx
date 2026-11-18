@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Image from "next/image";
 import { ArrowUpRight, Award, Briefcase, GraduationCap, Vote } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
@@ -10,12 +11,12 @@ import { CtaBand } from "@/components/home/cta-band";
 import { GitHubIcon } from "@/components/icons";
 import { siteConfig } from "@/site.config";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About",
   description:
     "Oakteck is a software business in Accra, Ghana, founded by Justice Amankrah: strong roots, smart systems, and software that helps Ghanaian businesses run and grow.",
-  alternates: { canonical: "/about" },
-};
+  path: "/about",
+});
 
 const stats = [
   { value: 7, suffix: "+", label: "years of experience" },

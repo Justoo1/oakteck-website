@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { PageHero } from "@/components/page-hero";
 import { ProductCard } from "@/components/product-card";
 import { Stagger, StaggerItem } from "@/components/motion/reveal";
 import { CtaBand } from "@/components/home/cta-band";
 import { products } from "@/content/products";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Products",
   description:
     "Oakteck's own products: Kwanix for bus ticketing and parcels, FlexiFund for credit unions, WASSCE Analytics for schools, Nkabom for daycares and AgriConnect for agriculture.",
-  alternates: { canonical: "/products" },
-};
+  path: "/products",
+});
 
 export default function ProductsPage() {
   return (
@@ -23,6 +24,7 @@ export default function ProductsPage() {
       />
       <section aria-label="All products" className="bg-paper py-16 lg:py-24">
         <div className="container-page">
+          <h2 className="sr-only">All products</h2>
           <Stagger as="ul" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {products.map((p) => (
               <StaggerItem as="li" key={p.slug}>

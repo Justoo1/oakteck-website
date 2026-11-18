@@ -3,13 +3,19 @@ import { Inter, Montserrat } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
-import { MotionProvider } from "@/components/motion/motion-provider";
+import { RevealObserver } from "@/components/motion/reveal-observer";
+import { JsonLd } from "@/components/json-ld";
+import { Analytics } from "@vercel/analytics/next";
+import { founderSchema, graph, organizationSchema, websiteSchema } from "@/lib/schema";
 import { siteConfig } from "@/site.config";
 import "./globals.css";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  // Body text paints in the size-matched fallback and swaps in; only the
+  // heading font is preloaded, so the first screen competes for less bandwidth.
+  preload: false,
 });
 
 const montserrat = Montserrat({
@@ -24,7 +30,19 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  applicationName: siteConfig.name,
+  authors: [{ name: siteConfig.founder.name, url: siteConfig.links.portfolio }],
+  openGraph: {
+    type: "website",
+    siteName: siteConfig.name,
+    locale: siteConfig.locale,
+  },
+  twitter: { card: "summary_large_image" },
+  formatDetection: { telephone: false },
 };
+
+/** Every route on this site must be fully static; the build fails if one isn't. */
+export const ensureStatic = "navigation";
 
 export const viewport: Viewport = {
   themeColor: siteConfig.brand.themeColor,
@@ -32,7 +50,17 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en-GH" className={`${inter.variable} ${montserrat.variable}`}>
+    <html lang="en-GH" className={`${inter.variable} ${montserrat.variable}`} suppressHydrationWarning>
+      <head>
+        {/* `js`: enables scroll-reveal hiding only when JS runs, so content is never stuck invisible.
+            `hl-go`: starts the hero vein animation once the page has loaded and is idle. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "var d=document.documentElement;d.classList.add('js');addEventListener('load',function(){(window.requestIdleCallback||setTimeout)(function(){d.classList.add('hl-go')},{timeout:1500})})",
+          }}
+        />
+      </head>
       <body className="flex min-h-dvh flex-col">
         <a
           href="#main"
@@ -40,17 +68,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <MotionProvider>
-          <Header />
-          <main id="main" tabIndex={-1} className="flex-1 outline-none">
-            {children}
-          </main>
-          <Footer />
-          <FloatingWhatsApp />
-        </MotionProvider>
-        <noscript>
-          <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
-        </noscript>
+        <Header />
+        <main id="main" tabIndex={-1} className="flex-1 outline-none">
+          {children}
+        </main>
+        <Footer />
+        <FloatingWhatsApp />
+        <RevealObserver />
+        <JsonLd data={graph(organizationSchema(), founderSchema(), websiteSchema())} />
+        {/* Vercel Web Analytics (cookieless). Only on Vercel, where its script is served. */}
+        {process.env.VERCEL && <Analytics />}
       </body>
     </html>
   );

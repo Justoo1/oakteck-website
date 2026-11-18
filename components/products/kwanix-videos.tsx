@@ -1,4 +1,5 @@
 import { Captions } from "lucide-react";
+import { VideoFacade } from "./video-facade";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { kwanixVideos } from "@/content/kwanix-videos";
 
@@ -12,7 +13,7 @@ export function KwanixVideos() {
             Kwanix demo videos
           </h2>
           <p className="mt-4 text-lg text-mist">
-            Short narrated walkthroughs, recorded on a demo company. Each one loads only when you press play.
+            Short narrated walkthroughs, recorded on a demo company. Nothing downloads until you press play.
           </p>
         </Reveal>
         <Stagger as="ul" className="mt-12 grid gap-8 md:grid-cols-2">
@@ -20,19 +21,7 @@ export function KwanixVideos() {
             <StaggerItem as="li" key={v.slug}>
               <figure>
                 <div className="overflow-hidden rounded-xl bg-navy-900 ring-1 ring-white/10">
-                  <video
-                    controls
-                    preload="none"
-                    playsInline
-                    poster={v.poster}
-                    width={1440}
-                    height={900}
-                    className="block aspect-[1440/900] h-auto w-full"
-                    aria-label={`Kwanix demo: ${v.title}`}
-                  >
-                    <source src={v.src} type="video/mp4" />
-                    {v.captions && <track kind="captions" src={v.captions} srcLang="en" label="English" default />}
-                  </video>
+                  <VideoFacade src={v.src} poster={v.poster} title={v.title} captions={v.captions} />
                 </div>
                 <figcaption className="mt-4">
                   <span className="flex items-center justify-between gap-4">

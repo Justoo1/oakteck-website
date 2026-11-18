@@ -1,4 +1,5 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
+import { preload } from "react-dom";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/site.config";
@@ -6,12 +7,14 @@ import { HeroLeaf, HeroRoots } from "./hero-leaf";
 import { HeroParallax } from "./hero-parallax";
 
 export function Hero() {
+  // The leaf's wood grain is a large image in the first view: fetch it early.
+  preload("/brand/oakteck-grain-mark.svg", { as: "image", fetchPriority: "high" });
   return (
     <section aria-labelledby="hero-title" className="on-dark relative isolate overflow-hidden bg-navy-950 text-white">
       {/* Soft brand-blue light behind the leaf; no gradients beyond navy and blue. */}
       <div
         aria-hidden="true"
-        className="absolute -top-40 right-[-20%] -z-10 size-[44rem] rounded-full bg-blue-500/15 blur-3xl lg:right-[-6%]"
+        className="absolute -top-40 right-[-20%] -z-10 size-[44rem] rounded-full bg-[radial-gradient(closest-side,rgb(19_128_204/0.30),transparent)] lg:right-[-6%]"
       />
       <div
         aria-hidden="true"
@@ -43,9 +46,9 @@ export function Hero() {
           </p>
         </div>
 
-        <HeroParallax className="relative mx-auto w-full max-w-[19rem] sm:max-w-sm lg:max-w-none">
+        <HeroParallax className="relative mx-auto w-full max-w-[14rem] sm:max-w-sm lg:max-w-none">
           <div className="relative aspect-square transition-transform duration-500 ease-out [transform:translate3d(calc(var(--px)*-18px),calc(var(--py)*-12px),0)]">
-            <HeroLeaf className="absolute inset-0 size-full drop-shadow-[0_30px_60px_rgb(0_0_0/0.35)]" />
+            <HeroLeaf className="absolute inset-0" />
             {/* Roots start at the leaf's stem (28% across, 94% down the leaf box) and run to the hero's bottom edge. */}
             <HeroRoots className="absolute top-[94%] left-[8%] h-[60vh] w-[40%]" />
           </div>

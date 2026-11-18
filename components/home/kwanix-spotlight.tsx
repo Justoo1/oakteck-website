@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import type { Route } from "next";
 import { ArrowUpRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,7 @@ export function KwanixSpotlight() {
   const kwanix = getProduct("kwanix")!;
   return (
     <section aria-labelledby="kwanix-title" className="on-dark relative overflow-hidden bg-navy-950 py-20 text-white lg:py-28">
-      <div aria-hidden="true" className="absolute bottom-0 left-1/2 -z-0 size-[40rem] -translate-x-1/2 translate-y-1/2 rounded-full bg-blue-500/10 blur-3xl" />
+      <div aria-hidden="true" className="absolute bottom-0 left-1/2 -z-0 size-[40rem] -translate-x-1/2 translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(19_128_204/0.20),transparent)]" />
       <div className="container-page relative grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
         <div>
           <Reveal>

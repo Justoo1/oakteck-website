@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import type { Route } from "next";
 import { ArrowRight } from "lucide-react";
 import type { WorkItem } from "@/content/work";

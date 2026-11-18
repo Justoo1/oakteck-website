@@ -93,6 +93,15 @@
   }
 }
 
+/* Scroll reveals (see components/motion/reveal.tsx). Below the first two
+   sections of a page, revealable content starts hidden once JS is available;
+   <RevealObserver> animates it in with the Web Animations API. The page header
+   and first block are on screen at load, so they are never hidden. */
+.js main > :nth-child(n + 3) [data-reveal],
+.js main > :nth-child(n + 3)[data-reveal] {
+  opacity: 0;
+}
+
 /* Route transitions (React <ViewTransition>). */
 ::view-transition {
   pointer-events: none;
