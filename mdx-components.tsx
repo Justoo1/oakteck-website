@@ -1,6 +1,8 @@
 import type { MDXComponents } from "mdx/types";
+import { Placeholder } from "@/components/placeholder";
 
 const components: MDXComponents = {
+  Placeholder,
   h2: (props) => <h2 className="mt-12 mb-4 text-2xl font-bold text-ink sm:text-3xl" {...props} />,
   h3: (props) => <h3 className="mt-8 mb-3 text-xl font-semibold text-ink" {...props} />,
   p: (props) => <p className="my-4 leading-relaxed text-muted" {...props} />,

@@ -1,0 +1,13 @@
+## The problem
+
+A business selling on both Shopify and WooCommerce has one stock count in Odoo but two shops taking orders. When orders are copied across by hand, or one at a time, the same item can sell twice and the ERP falls behind.
+
+## What was built
+
+- **Async middleware** that syncs Shopify and WooCommerce into Odoo, running on FastAPI with Celery workers.
+- **Redis locks** around stock updates, so two channels can't sell the same last item.
+- **A six-view operations dashboard** in Next.js, so the team can see what is syncing and what needs attention.
+
+## Outcome
+
+<Placeholder>[RESULTS: e.g. orders synced per day, or time saved; owner to supply]</Placeholder>
