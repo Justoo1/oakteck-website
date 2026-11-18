@@ -1,9 +1,16 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
+  typedRoutes: true,
+  poweredByHeader: false,
+  pageExtensions: ["ts", "tsx", "md", "mdx"],
+  images: {
+    formats: ["image/avif", "image/webp"],
+    qualities: [60, 75, 85],
+  },
   turbopack: {
     rules: {
       "*.css": {
@@ -12,6 +19,19 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  async redirects() {
+    return [
+      {
+        // www.oakteckgh.com -> oakteckgh.com (also configure this on the Vercel domain).
+        source: "/:path*",
+        has: [{ type: "host", value: "www.oakteckgh.com" }],
+        destination: "https://oakteckgh.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
 };
 
-export default nextConfig;
+const withMDX = createMDX({});
+
+export default withMDX(nextConfig);
