@@ -6,6 +6,7 @@ import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
 import { RevealObserver } from "@/components/motion/reveal-observer";
 import { JsonLd } from "@/components/json-ld";
 import { Analytics } from "@vercel/analytics/next";
+import { cloudflareAnalyticsToken, isCloudflareBuild } from "@/lib/hosting";
 import { founderSchema, graph, organizationSchema, websiteSchema } from "@/lib/schema";
 import { siteConfig } from "@/site.config";
 import "./globals.css";
@@ -41,8 +42,8 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false },
 };
 
-/** Every route on this site must be fully static; the build fails if one isn't. */
-export const ensureStatic = "navigation";
+/** Every page on this site must be fully static; the build fails if one isn't. */
+export const dynamic = "error";
 
 export const viewport: Viewport = {
   themeColor: siteConfig.brand.themeColor,
@@ -76,8 +77,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <FloatingWhatsApp />
         <RevealObserver />
         <JsonLd data={graph(organizationSchema(), founderSchema(), websiteSchema())} />
-        {/* Vercel Web Analytics (cookieless). Only on Vercel, where its script is served. */}
+        {/* Cookieless analytics: Vercel Web Analytics on Vercel, Cloudflare Web Analytics on Cloudflare. */}
         {process.env.VERCEL && <Analytics />}
+        {isCloudflareBuild && cloudflareAnalyticsToken && (
+          <script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon={JSON.stringify({ token: cloudflareAnalyticsToken })}
+          />
+        )}
       </body>
     </html>
   );

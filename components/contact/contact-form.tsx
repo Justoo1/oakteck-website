@@ -4,12 +4,33 @@ import { useActionState, useEffect, useRef, useSyncExternalStore } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WhatsAppIcon } from "@/components/brand/whatsapp-icon";
-import { sendEnquiry, type ContactState } from "@/app/contact/actions";
+import type { ContactState } from "@/lib/contact/types";
 import { contactMethods, enquiryOptions, optionFromQuery } from "@/content/enquiry-options";
 import { cn } from "@/lib/utils";
 import { whatsappLink } from "@/site.config";
 
 const initial: ContactState = { status: "idle" };
+
+/**
+ * Posts to /api/contact: a Next.js route handler on Vercel, a Cloudflare Worker
+ * on the static export. Both return a ContactState as JSON.
+ */
+async function sendEnquiry(_prev: ContactState, formData: FormData): Promise<ContactState> {
+  const values = Object.fromEntries(
+    ["name", "company", "contact", "service", "message", "preferred"].map((k) => [k, String(formData.get(k) ?? "")]),
+  );
+  try {
+    const res = await fetch("/api/contact", { method: "POST", body: formData });
+    const state = (await res.json()) as ContactState;
+    return state.status === "error" ? { ...state, values: state.values ?? values } : state;
+  } catch {
+    return {
+      status: "error",
+      message: "We couldn't reach our server. Check your connection and try again, or message us on WhatsApp.",
+      values,
+    };
+  }
+}
 
 // ?product=…&intent=… links from product-page CTAs preselect "What do you need?".
 const noopSubscribe = () => () => {};

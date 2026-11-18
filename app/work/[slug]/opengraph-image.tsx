@@ -9,6 +9,8 @@ export function generateStaticParams() {
   return work.map((w) => ({ slug: w.slug }));
 }
 
+export const dynamic = "force-static";
+
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const w = getWork(slug);

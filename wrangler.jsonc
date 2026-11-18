@@ -1,0 +1,19 @@
+// Cloudflare Workers config for the static export (`npm run build:cloudflare`).
+// Pages are served straight from out/ as static assets; only /api/* runs the Worker.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "oakteck-website",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./out",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  "observability": { "enabled": true }
+  // Secrets (set with `npx wrangler secret put <NAME>` or in the dashboard):
+  //   RESEND_API_KEY
+  // Plain variables (dashboard → Settings → Variables): CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL
+}

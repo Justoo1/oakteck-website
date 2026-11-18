@@ -4,15 +4,22 @@ Everything the site still needs from you. Items marked **(visible)** show as a d
 
 ## Before launch
 
-- [ ] **Register `oakteckgh.com` and set up DNS.** Point it at Vercel, add `www.oakteckgh.com` and redirect it to the bare domain. Then set `NEXT_PUBLIC_SITE_URL=https://oakteckgh.com` in Vercel and redeploy. See README → "Change the domain".
+The site is set up for **Cloudflare (free plan)**. README → "Hosting" has the step-by-step guide, and how to switch to Vercel later.
+
+- [ ] **Put the code on GitHub** (or GitLab). It's only in a local git repository right now. Cloudflare builds and deploys from it automatically on every push.
+- [ ] **Create the Cloudflare Worker from the repository.** Use build command `npm run build:cloudflare` and deploy command `npx wrangler deploy`.
+- [ ] **Register `oakteckgh.com` and add it to Cloudflare**: change the nameservers at your registrar. Then:
+  - attach the domain to the Worker;
+  - add the "Redirect from WWW to root" rule;
+  - set the build variable `NEXT_PUBLIC_SITE_URL=https://oakteckgh.com` and redeploy.
 - [ ] **Create the `hello@oakteckgh.com` mailbox.** Then change `CONTACT_EMAIL` in `site.config.ts` from `amankrahjay@gmail.com`; it updates the footer, contact page, privacy policy and structured data.
 - [ ] **Set up Resend:**
-  - Create an API key and add it to Vercel as `RESEND_API_KEY`.
-  - Verify `oakteckgh.com` in Resend.
+  - Create an API key and add it to the Worker as the secret `RESEND_API_KEY`.
+  - Verify `oakteckgh.com` in Resend; its DNS records go in Cloudflare DNS.
   - Set `CONTACT_FROM_EMAIL` (for example `Oakteck website <website@oakteckgh.com>`) and `CONTACT_TO_EMAIL`.
   - Send a test enquiry from the live site.
-- [ ] **Enable Vercel Web Analytics** in the Vercel dashboard.
-- [ ] **Run PageSpeed Insights (mobile) on Home and `/products/kwanix` once live.** The brief asks for 95+. Locally, Home's median was 82 (best 97) and Kwanix's 93 (89–94); see README → "Performance and accessibility".
+- [ ] **Turn on Cloudflare Web Analytics** (optional, cookieless): add the site in the Cloudflare dashboard and put its token in the build variable `NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN`.
+- [ ] **Run PageSpeed Insights (mobile) on Home and `/products/kwanix` once live.** The brief asks for 95+. In local tests Home scored 72–97 and Kwanix 84–98, depending on how busy the test machine was; see README → "Performance and accessibility".
 
 ## Facts only you can supply
 
@@ -40,7 +47,7 @@ Everything the site still needs from you. Items marked **(visible)** show as a d
 - [ ] **Privacy policy** (`/privacy`), marked "Draft: to be reviewed":
   - have it reviewed;
   - fill in **[DATE]** (visible) and **[RETENTION PERIOD]** (visible), how long you keep enquiries;
-  - confirm the processors listed: Resend, Vercel Web Analytics and WhatsApp.
+  - confirm the processors listed: Resend, the host's analytics (Cloudflare or Vercel Web Analytics) and WhatsApp.
 - [ ] **Public links.** Confirm you're happy linking to each of these:
   - the Nkabom GitHub repo (github.com/Justoo1/daycare-management-system): is it public?
   - the FlexiFund demo (flexifund.edtmsys.com);

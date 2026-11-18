@@ -20,9 +20,8 @@ import { JsonLd } from "@/components/json-ld";
 import { graph, kwanixSchema } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 
-/** Every page here is prerendered from generateStaticParams, so the dev-time
- *  instant-navigation check (params outside Suspense) does not apply. */
-export const instant = false;
+/** Only the slugs from generateStaticParams exist; anything else is a 404. */
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
@@ -39,9 +38,6 @@ export async function generateMetadata({ params }: PageProps<"/products/[slug]">
   });
 }
 
-// Params come from generateStaticParams, so every page is fully prerendered.
-// Awaiting them here (rather than behind a Suspense fallback) keeps the fallback
-// out of the static HTML, which otherwise caused a layout shift on load.
 export default async function ProductPage({ params }: PageProps<"/products/[slug]">) {
   const { slug } = await params;
   const product = getProduct(slug);

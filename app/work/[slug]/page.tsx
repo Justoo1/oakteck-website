@@ -7,9 +7,8 @@ import { PageHero } from "@/components/page-hero";
 import { CtaBand } from "@/components/home/cta-band";
 import { getWork, work } from "@/content/work";
 
-/** Every page here is prerendered from generateStaticParams, so the dev-time
- *  instant-navigation check (params outside Suspense) does not apply. */
-export const instant = false;
+/** Only the slugs from generateStaticParams exist; anything else is a 404. */
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return work.map((w) => ({ slug: w.slug }));
@@ -22,9 +21,6 @@ export async function generateMetadata({ params }: PageProps<"/work/[slug]">): P
   return pageMetadata({ title: item.title, description: item.summary, path: `/work/${item.slug}` });
 }
 
-// Params come from generateStaticParams, so every page is fully prerendered.
-// Awaiting them here (rather than behind a Suspense fallback) keeps the fallback
-// out of the static HTML, which otherwise caused a layout shift on load.
 export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]">) {
   const { slug } = await params;
   const item = getWork(slug);

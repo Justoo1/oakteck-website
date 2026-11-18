@@ -4,6 +4,8 @@ export const alt = "Oakteck: Products built for Ghanaian businesses.";
 export const size = ogSize;
 export const contentType = ogContentType;
 
+export const dynamic = "force-static";
+
 export default function Image() {
   return renderOg({ title: "Products built for Ghanaian businesses.", eyebrow: "Products" });
 }

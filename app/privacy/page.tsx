@@ -3,6 +3,7 @@ import { pageMetadata } from "@/lib/metadata";
 import { PageHero } from "@/components/page-hero";
 import { Placeholder } from "@/components/placeholder";
 import { siteConfig } from "@/site.config";
+import { hosting } from "@/lib/hosting";
 
 export const metadata: Metadata = pageMetadata({
   title: "Privacy policy",
@@ -74,9 +75,10 @@ export default function PrivacyPage() {
 
           <H2>Analytics</H2>
           <p>
-            We use <strong>Vercel Web Analytics</strong> to count page views and see which pages are useful. It does not
-            use cookies and does not identify you personally; it reports aggregated visits. Because no analytics cookies
-            are set, this site does not show a cookie banner.
+            This site is hosted on <strong>{hosting.provider}</strong>. We use <strong>{hosting.analytics}</strong> to
+            count page views and see which pages are useful. It does not use cookies and does not identify you
+            personally; it reports aggregated visits. Because no analytics cookies are set, this site does not show a
+            cookie banner.
           </p>
 
           <H2>How long we keep your data</H2>

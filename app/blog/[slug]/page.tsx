@@ -7,9 +7,8 @@ import { PageHero } from "@/components/page-hero";
 import { DraftBadge } from "@/components/draft-badge";
 import { getPost, posts } from "@/content/blog";
 
-/** Every page here is prerendered from generateStaticParams, so the dev-time
- *  instant-navigation check (params outside Suspense) does not apply. */
-export const instant = false;
+/** Only the slugs from generateStaticParams exist; anything else is a 404. */
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
@@ -22,9 +21,6 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
   return pageMetadata({ title: post.title, description: post.summary, path: `/blog/${post.slug}`, noindex: post.draft });
 }
 
-// Params come from generateStaticParams, so every page is fully prerendered.
-// Awaiting them here (rather than behind a Suspense fallback) keeps the fallback
-// out of the static HTML, which otherwise caused a layout shift on load.
 export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
   const { slug } = await params;
   const post = getPost(slug);

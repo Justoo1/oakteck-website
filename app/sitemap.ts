@@ -4,6 +4,8 @@ import { work } from "@/content/work";
 import { publishedPosts } from "@/content/blog";
 import { absoluteUrl } from "@/site.config";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: { path: string; priority: number }[] = [
     { path: "/", priority: 1 },

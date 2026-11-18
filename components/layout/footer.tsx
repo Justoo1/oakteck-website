@@ -7,8 +7,8 @@ import { WhatsAppIcon } from "@/components/icons";
 import { products } from "@/content/products";
 import { siteConfig, whatsappLink } from "@/site.config";
 
-async function CopyrightYear() {
-  "use cache";
+/** Year of the build; every deploy refreshes it. */
+function CopyrightYear() {
   return <>{new Date().getFullYear()}</>;
 }
 

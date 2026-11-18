@@ -1,21 +1,29 @@
-"use server";
-
-import { headers } from "next/headers";
-import { Resend } from "resend";
+/**
+ * Contact-form handling shared by both hosting targets:
+ *   - Vercel:     app/api/contact/route.vercel.ts (Next.js route handler)
+ *   - Cloudflare: worker/index.ts (Worker in front of the static export)
+ *
+ * It must run in Node.js and in the Workers runtime, so it uses only web APIs
+ * (fetch, FormData) and relative imports.
+ */
 import { z } from "zod";
-import { contactMethods, enquiryOptions } from "@/content/enquiry-options";
-import { rateLimit } from "@/lib/rate-limit";
-import { siteConfig } from "@/site.config";
+import { contactMethods, enquiryOptions } from "../../content/enquiry-options";
+import { rateLimit } from "../rate-limit";
+import { siteConfig } from "../../site.config";
+import type { ContactField, ContactState } from "./types";
 
-export type ContactState = {
-  status: "idle" | "success" | "error";
-  message?: string;
-  fieldErrors?: Partial<Record<"name" | "company" | "contact" | "service" | "message" | "preferred", string>>;
-  values?: Record<string, string>;
+export type EnquiryEnv = {
+  RESEND_API_KEY?: string;
+  CONTACT_TO_EMAIL?: string;
+  CONTACT_FROM_EMAIL?: string;
+  /** True locally: without an API key, enquiries are logged instead of emailed. */
+  isDev: boolean;
 };
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE = /^\+?[\d\s()-]{9,20}$/;
+const FIELDS: ContactField[] = ["name", "company", "contact", "service", "message", "preferred"];
+const MIN_FILL_MS = 2500;
 
 const schema = z
   .object({
@@ -41,12 +49,19 @@ const schema = z
     }
   });
 
-const MIN_FILL_MS = 2500;
+/** Rejects posts from other sites (server actions did this for us before). */
+export function isSameOrigin(request: Request) {
+  const origin = request.headers.get("origin");
+  if (!origin) return true; // same-origin form posts from some browsers omit it
+  try {
+    return new URL(origin).host === new URL(request.url).host;
+  } catch {
+    return false;
+  }
+}
 
-export async function sendEnquiry(_prev: ContactState, formData: FormData): Promise<ContactState> {
-  const raw = Object.fromEntries(
-    ["name", "company", "contact", "service", "message", "preferred"].map((k) => [k, String(formData.get(k) ?? "")]),
-  );
+export async function handleEnquiry(formData: FormData, clientIp: string, env: EnquiryEnv): Promise<ContactState> {
+  const raw = Object.fromEntries(FIELDS.map((k) => [k, String(formData.get(k) ?? "")]));
 
   // Honeypot and fill-time checks: bots get a quiet "success" so they don't retry.
   const startedAt = Number(formData.get("startedAt"));
@@ -58,16 +73,14 @@ export async function sendEnquiry(_prev: ContactState, formData: FormData): Prom
   if (!parsed.success) {
     const fieldErrors: ContactState["fieldErrors"] = {};
     for (const issue of parsed.error.issues) {
-      const key = issue.path[0] as keyof NonNullable<ContactState["fieldErrors"]>;
+      const key = issue.path[0] as ContactField;
       fieldErrors[key] ??= issue.message;
     }
     return { status: "error", message: "Please check the highlighted fields.", fieldErrors, values: raw };
   }
 
   // Count only messages that would actually be sent, so typos never lock anyone out.
-  const h = await headers();
-  const ip = (h.get("x-forwarded-for") ?? "").split(",")[0].trim() || h.get("x-real-ip") || "unknown";
-  const limited = rateLimit(`contact:${ip}`, { limit: 5, windowMs: 10 * 60 * 1000 });
+  const limited = rateLimit(`contact:${clientIp}`, { limit: 5, windowMs: 10 * 60 * 1000 });
   if (!limited.ok) {
     return {
       status: "error",
@@ -88,28 +101,42 @@ export async function sendEnquiry(_prev: ContactState, formData: FormData): Prom
     d.message,
   ].join("\n");
 
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    if (process.env.NODE_ENV !== "production") {
+  if (!env.RESEND_API_KEY) {
+    if (env.isDev) {
       console.info("[contact] RESEND_API_KEY not set; enquiry not emailed:\n" + text);
-      return { status: "success", message: "Development mode: RESEND_API_KEY is not set, so the enquiry was logged to the server console." };
+      return {
+        status: "success",
+        message: "Development mode: RESEND_API_KEY is not set, so the enquiry was logged to the server console.",
+      };
     }
     console.error("[contact] RESEND_API_KEY is not set");
     return { status: "error", message: "Our form is having trouble right now. Please reach us on WhatsApp or by phone.", values: raw };
   }
 
-  const resend = new Resend(apiKey);
-  const { error } = await resend.emails.send({
-    from: process.env.CONTACT_FROM_EMAIL || "Oakteck website <onboarding@resend.dev>",
-    to: process.env.CONTACT_TO_EMAIL || siteConfig.contact.email,
-    replyTo: EMAIL.test(d.contact) ? d.contact : undefined,
-    subject: `New enquiry: ${d.service} from ${d.name}${d.company ? ` (${d.company})` : ""}`,
-    text,
+  // Resend REST API (https://resend.com/docs/api-reference/emails/send-email).
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: env.CONTACT_FROM_EMAIL || "Oakteck website <onboarding@resend.dev>",
+      to: [env.CONTACT_TO_EMAIL || siteConfig.contact.email],
+      reply_to: EMAIL.test(d.contact) ? d.contact : undefined,
+      subject: `New enquiry: ${d.service} from ${d.name}${d.company ? ` (${d.company})` : ""}`,
+      text,
+    }),
   });
 
-  if (error) {
-    console.error("[contact] Resend error", error);
+  if (!res.ok) {
+    console.error("[contact] Resend error", res.status, await res.text().catch(() => ""));
     return { status: "error", message: "We couldn't send your message. Please try again, or reach us on WhatsApp.", values: raw };
   }
   return { status: "success" };
+}
+
+/** JSON response helper used by both entry points. */
+export function json(state: ContactState, status = 200) {
+  return new Response(JSON.stringify(state), {
+    status,
+    headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" },
+  });
 }
