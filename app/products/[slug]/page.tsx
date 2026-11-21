@@ -256,7 +256,7 @@ function Audience({ product }: { product: Product }) {
             <StatusBadge status={product.status} />
             <p className="text-sm text-muted">
               {product.status === "live"
-                ? `${product.name} is live and in use today.`
+                ? `${product.name} is live today.`
                 : `${product.name} is in development.${product.statusNote ? ` ${product.statusNote}.` : ""}`}
             </p>
           </div>

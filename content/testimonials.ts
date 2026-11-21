@@ -56,5 +56,8 @@ const isProduction = process.env.VERCEL_ENV
   ? process.env.VERCEL_ENV === "production"
   : process.env.NODE_ENV === "production";
 
+/** True until every sample has been replaced with a real, permissioned quote. */
+export const hasSampleTestimonials = testimonials.some((t) => t.sample);
+
 /** False in production while any testimonial is still a sample. */
-export const showTestimonials = !(isProduction && testimonials.some((t) => t.sample));
+export const showTestimonials = !(isProduction && hasSampleTestimonials);

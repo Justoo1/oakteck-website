@@ -31,7 +31,7 @@ The site is set up for **Cloudflare (free plan)**. README → "Hosting" has the 
 - [ ] **About timeline years (visible)** in `app/about/page.tsx`:
   - The year Justice worked as a systems administrator for the Electoral Commission of Ghana.
   - The year Oakteck was founded or registered.
-- [ ] **Real testimonials.** Replace the five sample quotes in `content/testimonials.ts` with real ones you have permission to publish, and set `sample: false` on each. The section stays hidden in production until no samples remain.
+- [ ] **Real testimonials.** Replace the five sample quotes in `content/testimonials.ts` with real ones you have permission to publish, and set `sample: false` on each. Until then, Home shows a "Live in production" section in that spot; it switches to the testimonials automatically once no samples remain.
 - [ ] **Client logos.** None are shown. Send any you have written permission to use.
 - [ ] **BCSE screenshot (visible).** A screenshot of bcse.edtmsys.com for the FlexiFund page ("Live at BCSE" section). I can capture it if you confirm that's fine with BCSE.
 - [ ] **Case study results (visible).** The "Outcome" for MCEES Engine, GMAK Properties, AI CV optimiser and Apothecary Farms (`content/work/*.mdx`). The barcode inventory system already has its "manual errors down 70%".

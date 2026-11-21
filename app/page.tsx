@@ -8,6 +8,8 @@ import { ProductsGrid } from "@/components/home/products-grid";
 import { HowWeWork } from "@/components/home/how-we-work";
 import { SelectedWork } from "@/components/home/selected-work";
 import { Testimonials } from "@/components/testimonials";
+import { LiveInProduction } from "@/components/home/live-in-production";
+import { hasSampleTestimonials } from "@/content/testimonials";
 import { FounderNote } from "@/components/home/founder-note";
 import { TechMarquee } from "@/components/home/tech-marquee";
 import { CtaBand } from "@/components/home/cta-band";
@@ -30,6 +32,8 @@ export default function HomePage() {
       <ProductsGrid />
       <HowWeWork />
       <SelectedWork />
+      {/* Until real client quotes replace the samples, show products in use instead. */}
+      {hasSampleTestimonials && <LiveInProduction />}
       <Testimonials />
       <FounderNote />
       <TechMarquee />

@@ -113,7 +113,7 @@ Posts are listed in `content/blog.ts` with bodies in `content/blog/<slug>.mdx`. 
 
 ### Testimonials
 
-`content/testimonials.ts` holds **sample** quotes from the brief, each with `sample: true`. While any entry is a sample, the section **does not render in production** (`VERCEL_ENV=production`, or `NODE_ENV=production` off Vercel). It renders with a "Sample" badge in development (`npm run dev`) and in Vercel preview deployments. Cloudflare builds are always production builds, so there they stay hidden. Replace the samples with real, permissioned quotes and set `sample: false` on each to publish the section.
+`content/testimonials.ts` holds **sample** quotes from the brief, each with `sample: true`. While any entry is a sample, the section **does not render in production** (`VERCEL_ENV=production`, or `NODE_ENV=production` off Vercel). It renders with a "Sample" badge in development (`npm run dev`) and in Vercel preview deployments. Cloudflare builds are always production builds, so there they stay hidden. While samples remain, Home shows a **"Live in production"** section in that spot instead (`components/home/live-in-production.tsx`: Kwanix, FlexiFund at BCSE and WASSCE Analytics). Replace the samples with real, permissioned quotes and set `sample: false` on each: the testimonials then appear and the "Live in production" section is removed automatically.
 
 ### Products and services
 
