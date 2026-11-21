@@ -24,7 +24,7 @@ The site is set up for **Cloudflare (free plan)**. README → "Hosting" has the 
 ## Facts only you can supply
 
 - [ ] **Office hours (visible).** Shown in the footer and on `/contact`. Set `officeHours` in `site.config.ts`.
-- [ ] **Founder quote (visible).** The "A note from the founder" block on Home needs two or three sentences in Justice's own words: `components/home/founder-note.tsx`.
+- [ ] **Founder quote: review the draft.** The "A note from the founder" block on Home has a draft quote written from the brief. Edit it in `components/home/founder-note.tsx` until it sounds like you.
 - [ ] **Accra street address.** Decide whether a street address should be shown.
   - If yes, set `streetAddress` in `site.config.ts`. It then appears on `/contact` and in structured data.
   - Either way, fill in the **privacy policy** address placeholder (visible).

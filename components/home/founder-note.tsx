@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "@/components/app-link";
 import { ArrowRight } from "lucide-react";
-import { Placeholder } from "@/components/placeholder";
 import { Reveal } from "@/components/motion/reveal";
 import { siteConfig } from "@/site.config";
 
@@ -27,7 +26,12 @@ export function FounderNote() {
               A note from the founder
             </h2>
             <blockquote className="mt-4 font-heading text-2xl leading-snug font-semibold text-ink sm:text-[1.75rem]">
-              <Placeholder>[FOUNDER QUOTE: two or three sentences in Justice&apos;s own words]</Placeholder>
+              <p>
+                &ldquo;I started Oakteck because too many good Ghanaian businesses still run on paper books, cash
+                counts and guesswork. We build software around how your business already works, with Mobile Money, SMS
+                and patchy networks in mind, and we stay to support it after launch. Strong roots first, then smart
+                systems.&rdquo;
+              </p>
             </blockquote>
             <p className="mt-6 text-sm">
               <span className="font-semibold text-ink">{founder.name}</span>
