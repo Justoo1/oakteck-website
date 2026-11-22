@@ -8,10 +8,10 @@
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3200").replace(/\/$/, "");
 
 /**
- * Public contact address. Switch to "hello@oakteckgh.com" once the domain's
- * mailbox is set up (see OWNER-TODO.md).
+ * Public contact address. Mail to it is forwarded to the owner's inbox by
+ * Cloudflare Email Routing.
  */
-const CONTACT_EMAIL = "amankrahjay@gmail.com";
+const CONTACT_EMAIL = "hello@oakteckgh.com";
 
 export const siteConfig = {
   name: "Oakteck",

@@ -39,7 +39,7 @@ Locally, set these in `.env.local` (Next.js) and `.dev.vars` (Cloudflare preview
 |---|---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | Yes | `https://oakteckgh.com` (prod), `http://localhost:3200` (local) | Canonical URLs, Open Graph, sitemap, robots, JSON-LD |
 | `RESEND_API_KEY` | In production | `re_…` | Sending contact-form emails |
-| `CONTACT_TO_EMAIL` | No | `amankrahjay@gmail.com` | Where enquiries are delivered (defaults to the address in `site.config.ts`) |
+| `CONTACT_TO_EMAIL` | No | `hello@oakteckgh.com` | Where enquiries are delivered (defaults to the address in `site.config.ts`) |
 | `CONTACT_FROM_EMAIL` | No | `Oakteck website <website@oakteckgh.com>` | Sender address (defaults to `onboarding@resend.dev`) |
 | `NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN` | Cloudflare only | `0123…` | Cloudflare Web Analytics site token (cookieless) |
 | `NOINDEX` | No | `1` | Tells search engines not to index this build (for preview deployments) |

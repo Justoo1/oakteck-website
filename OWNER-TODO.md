@@ -12,7 +12,8 @@ The site is set up for **Cloudflare (free plan)**. README → "Hosting" has the 
   - attach the domain to the Worker;
   - add the "Redirect from WWW to root" rule;
   - set the build variable `NEXT_PUBLIC_SITE_URL=https://oakteckgh.com` and redeploy.
-- [ ] **Create the `hello@oakteckgh.com` mailbox.** Then change `CONTACT_EMAIL` in `site.config.ts` from `amankrahjay@gmail.com`; it updates the footer, contact page, privacy policy and structured data.
+- [x] **`hello@oakteckgh.com` receives mail** (Cloudflare Email Routing forwards it to Gmail). The website now shows it everywhere.
+- [ ] **Reply as hello@ from Gmail** (optional): Gmail "Send mail as" through Resend's SMTP, once `oakteckgh.com` is verified in Resend.
 - [ ] **Set up Resend:**
   - Create an API key and add it to the Worker as the secret `RESEND_API_KEY`.
   - Verify `oakteckgh.com` in Resend; its DNS records go in Cloudflare DNS.
