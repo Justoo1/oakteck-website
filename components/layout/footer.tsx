@@ -2,7 +2,6 @@ import Link from "@/components/app-link";
 import type { Route } from "next";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
-import { Placeholder } from "@/components/placeholder";
 import { WhatsAppIcon } from "@/components/icons";
 import { products } from "@/content/products";
 import { siteConfig, whatsappLink } from "@/site.config";
@@ -103,7 +102,7 @@ export function Footer() {
             </li>
             <li className="flex items-center gap-3 text-white/80">
               <Clock className="size-4 text-wood-400" aria-hidden="true" />
-              <Placeholder>{contact.officeHours}</Placeholder>
+              {contact.officeHours}
             </li>
           </ul>
         </div>

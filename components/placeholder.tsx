@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * A visible marker for facts the owner still has to supply. Every use is
- * listed in OWNER-TODO.md. Renders as e.g. "[OFFICE HOURS]".
+ * listed in OWNER-TODO.md. Renders as e.g. "[DATE]".
  */
 export function Placeholder({ children, className }: { children: React.ReactNode; className?: string }) {
   return (

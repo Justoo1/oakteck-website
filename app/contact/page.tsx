@@ -3,7 +3,6 @@ import { pageMetadata } from "@/lib/metadata";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHero } from "@/components/page-hero";
-import { Placeholder } from "@/components/placeholder";
 import { ContactForm } from "@/components/contact/contact-form";
 import { WhatsAppIcon } from "@/components/icons";
 import { siteConfig, whatsappLink } from "@/site.config";
@@ -27,7 +26,7 @@ export default function ContactPage() {
         ? `${contact.location.streetAddress}, ${contact.location.city}, ${contact.location.country}`
         : `${contact.location.city}, ${contact.location.country}`,
     },
-    { icon: Clock, label: "Office hours", value: <Placeholder>{contact.officeHours}</Placeholder> },
+    { icon: Clock, label: "Office hours", value: contact.officeHours },
   ];
 
   return (

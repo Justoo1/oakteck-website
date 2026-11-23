@@ -49,7 +49,8 @@ export const siteConfig = {
       /** Leave null until the owner confirms a street address should be shown. */
       streetAddress: null as string | null,
     },
-    officeHours: "[OFFICE HOURS]",
+    /** Ghana time (GMT, no daylight saving). */
+    officeHours: "Mon–Sat, 8 AM – 5 PM (GMT)",
   },
 
   founder: {
