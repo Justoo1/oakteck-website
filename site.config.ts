@@ -24,6 +24,7 @@ export const siteConfig = {
     registrationNumber: "BN032161222",
     form: "Registered business name in Ghana",
     owner: "Justice Amankrah",
+    foundingYear: "2019",
   },
 
   tagline: "Strong roots. Smart systems.",

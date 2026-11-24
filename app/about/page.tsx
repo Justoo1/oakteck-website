@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/metadata";
 import Image from "next/image";
-import { ArrowUpRight, Award, Briefcase, GraduationCap, Vote } from "lucide-react";
+import { ArrowUpRight, Award, Briefcase, GraduationCap, Landmark, Vote } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
-import { Placeholder } from "@/components/placeholder";
 import { Logo } from "@/components/brand/logo";
 import { Counter } from "@/components/motion/counter";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
@@ -35,9 +34,15 @@ const experience = [
 const timeline = [
   {
     icon: Vote,
-    when: <Placeholder>[YEAR]</Placeholder>,
+    when: "2016 to 2017",
     title: "Electoral Commission of Ghana",
     body: "Systems administrator during national voter registration.",
+  },
+  {
+    icon: Award,
+    when: "2019",
+    title: "Founded Oakteck",
+    body: "Registered in Ghana as Oakteck Technology, building products and custom software for African businesses.",
   },
   {
     icon: GraduationCap,
@@ -46,16 +51,16 @@ const timeline = [
     body: "Certifications include AWS Solutions Architect Associate and CCNA.",
   },
   {
+    icon: Landmark,
+    when: "2022",
+    title: "National service",
+    body: "Completed national service back at the Electoral Commission of Ghana.",
+  },
+  {
     icon: Briefcase,
     when: "2023 to present",
     title: "Lead engineer and team lead",
     body: "Leading a team of engineers across three continents.",
-  },
-  {
-    icon: Award,
-    when: <Placeholder>[YEAR]</Placeholder>,
-    title: "Founded Oakteck",
-    body: "Registered in Ghana as Oakteck Technology, building products and custom software for African businesses.",
   },
 ];
 

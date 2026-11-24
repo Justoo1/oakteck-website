@@ -29,9 +29,7 @@ The site is set up for **Cloudflare (free plan)**. README → "Hosting" has the 
 - [ ] **Accra street address.** Decide whether a street address should be shown.
   - If yes, set `streetAddress` in `site.config.ts`. It then appears on `/contact` and in structured data.
   - Either way, fill in the **privacy policy** address placeholder (visible).
-- [ ] **About timeline years (visible)** in `app/about/page.tsx`:
-  - The year Justice worked as a systems administrator for the Electoral Commission of Ghana.
-  - The year Oakteck was founded or registered.
+- [x] **About timeline years:** Electoral Commission 2016 to 2017, Oakteck founded 2019, national service at the Electoral Commission 2022 (`app/about/page.tsx`).
 - [ ] **Real testimonials.** Replace the five sample quotes in `content/testimonials.ts` with real ones you have permission to publish, and set `sample: false` on each. Until then, Home shows a "Live in production" section in that spot; it switches to the testimonials automatically once no samples remain.
 - [ ] **Client logos.** None are shown. Send any you have written permission to use.
 - [ ] **BCSE screenshot (visible).** A screenshot of bcse.edtmsys.com for the FlexiFund page ("Live at BCSE" section). I can capture it if you confirm that's fine with BCSE.

@@ -19,6 +19,7 @@ export function organizationSchema() {
     email: contact.email,
     telephone: contact.phone.e164,
     founder: { "@id": FOUNDER_ID },
+    foundingDate: legal.foundingYear,
     address: {
       "@type": "PostalAddress",
       ...(contact.location.streetAddress ? { streetAddress: contact.location.streetAddress } : {}),
